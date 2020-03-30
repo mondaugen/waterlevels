@@ -7,8 +7,11 @@ import sys
 import dbm
 import time
 import string
+import common
 
-with dbm.open('data/waterlevel_history','c') as db:
+DB_PATH=common.get_env.str('DB_PATH',default='data/waterlevel_history')
+
+with dbm.open(DB_PATH,'c') as db:
     for line in sys.stdin:
         line=line.strip(string.whitespace+',;').translate({ord(';'):ord(',')})
         fields=line.split(',')

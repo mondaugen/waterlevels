@@ -13,6 +13,7 @@
 # add to database
 # this should only be run rarely, say once a day
 # other requests will fill in the missing hours
+export PYTHONPATH="$(dirname $0):$PYTHONPATH"
 csv_addr="$(curl 'http://www.isdm-gdsi.gc.ca/isdm-gdsi/twl-mne/inventory-inventaire/data-donnees-eng.asp?user=isdm-gdsi&region=LAU&tst=1&no=15520' \
 -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:74.0) Gecko/20100101 Firefox/74.0' \
 -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' \
@@ -22,8 +23,8 @@ csv_addr="$(curl 'http://www.isdm-gdsi.gc.ca/isdm-gdsi/twl-mne/inventory-inventa
 -H 'Connection: keep-alive' \
 -H 'Referer: http://www.isdm-gdsi.gc.ca/isdm-gdsi/twl-mne/inventory-inventaire/interval-intervalle-eng.asp?user=isdm-gdsi&region=LAU&tst=1&no=15520' \
 -H 'Upgrade-Insecure-Requests: 1' \
---data 'start_period=1960%2F01%2F01&end_period='$(date +%Y%%2F%m%%2F%d)'&resolution=d&time_zone=l&pcode=slev&datum=c' | \
-PYTHONPATH=. python3 -c '
+--data 'start_period=2000%2F01%2F01&end_period='$(date +%Y%%2F%m%%2F%d)'&resolution=d&time_zone=l&pcode=slev&datum=c' | \
+python3 -c '
 from waterlevel_parser import FindWaterCSV
 import sys
 fw=FindWaterCSV()
@@ -34,4 +35,4 @@ echo "Downloading $full_csv_addr"
 
 # get csv and keep only lines beginning with dates
 curl "$full_csv_addr" | grep -E '^[0-9]{4}/[0-9]{2}/[0-9]{2}' | \
-python3 update_wl_database.py
+python3 "$(dirname $0)/update_wl_database.py"
