@@ -4,14 +4,17 @@ import dbm
 import plotly.graph_objects as go
 import time
 import numpy as np
+import common
 
-# 60 minutes between observations
-TIME_IVAL=3600
+# default is 60 minutes between observations
+TIME_IVAL=common.get_env.float('TIME_IVAL',default=3600)
+DB_PATH=common.get_env.str('DB_PATH',default='data/waterlevel_history')
+RENDER_HTML=common.get_env.int('RENDER_HTML',default=0)
 
 times=[]
 levels=[]
 date_time=[]
-with dbm.open('data/waterlevel_history','r') as db:
+with dbm.open(DB_PATH,'r') as db:
     numer_keys=[(float(k),k) for k in db.keys()]
     for nk,k in sorted(numer_keys,key=lambda t: t[0]):
         entries=[b.decode() for b in db[k].split(bytes(',',encoding='utf-8'))]
@@ -41,5 +44,7 @@ fig.update_layout(
     yaxis=dict(title='Height (metres)')
 )
 
-#fig.write_html(sys.stdout)
-fig.show()
+if RENDER_HTML != 0:
+    fig.write_html(sys.stdout)
+else:
+    fig.show()
