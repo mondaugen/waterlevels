@@ -39,7 +39,7 @@ fig = go.Figure(
 )
 
 fig.update_layout(
-    title='St. Lawrence water level measured at Jetee #1',
+    title='St. Lawrence river water level measured at Jetee #1',
     xaxis=dict(title='Date'),
     yaxis=dict(title='Height (metres)')
 )
