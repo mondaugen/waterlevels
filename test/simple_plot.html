@@ -2,27 +2,15 @@
 <html>
 <head>
 <meta http-equiv='Content-Type' content='text/html:charset=utf-8' />
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="../lib/plotly.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
 <div id="tester" ></div>
 <script>
-//var old_formatter = Plotly.d3_locale_numberFormat;
-//Plotly.d3_locale_numberFormat=function(locale){
-//    // ignore locale
-//    return function(val) {
-//        var d = Date(val*1000); // convert time to milliseconds then date
-//        return d3.timeFormat('%Y %m %d %H:%M')(d);
-//        //old_formatter(str)(val);
-//    }
-//};
-var mydict = {myformat: '$'};
 var myx = [1, 2, 3, 4, 5];
 var layout = {
 margin: { t: 0 }, 
-//xaxis: {tickformat:'%Y %m %d %H:%M'}
-xaxis: {tickformat:mydict.myformat}
+xaxis: {tickformat:':%Y %m %d %H:%M'}
 };
 //debugger;
 TESTER = document.getElementById('tester');
