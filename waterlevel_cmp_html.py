@@ -10,7 +10,7 @@ import plotwl
 # default is 60 minutes between observations
 TIME_IVAL=common.get_env.float('TIME_IVAL',default=3600)
 # a string containing a %s where the station ID should be inserted
-DB_PATH_FMT=common.get_env.str('DB_PATH',default='data/waterlevel_history_%s')
+DB_PATH_FMT=common.get_env.str('DB_PATH_FMT',default='data/waterlevel_history_%s')
 RENDER_HTML=common.get_env.int('RENDER_HTML',default=0)
 # a string containing station IDs separated by commas
 STATION_IDS=common.get_env.str('STATION_IDS',default='15520,15540')
