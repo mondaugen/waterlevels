@@ -67,6 +67,6 @@ fig.update_layout(
 )
 
 if RENDER_HTML != 0:
-    fig.write_html(sys.stdout)
+    fig.write_html(sys.stdout,include_plotlyjs='cdn',post_script='PLOT_DIV="{plot_id}";')
 else:
     fig.show()
