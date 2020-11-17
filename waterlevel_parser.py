@@ -1,4 +1,8 @@
 from html.parser import HTMLParser
+import re
+
+# match the paragraph containing the link
+link_p_matcher=re.compile("^Data file has been created, click on the file name to download\.")
 class WaterParse(HTMLParser):
     """ Parse waterlevels from a site displaying them in list format """
     def __init__(self):
@@ -27,17 +31,14 @@ class FindWaterCSV(WaterParse):
     downloaded.
     """
     def handle_starttag(self,tag,attrs):
-        if (tag == 'p'):
-            for k,v in attrs:
-                if k == 'class':
-                    self.relaying=(v=="firstItem fieldsetP")
-        elif self.relaying and (tag == 'a'):
+        if self.relaying and (tag == 'a'):
             for k,v in attrs:
                 if k == 'href':
                     print(v)
-        if self.relaying:
-            self.depth += 1
+                    self.relaying = False
     def handle_data(self,data):
-        pass
+        data=data.strip()
+        if link_p_matcher.match(data):
+            self.relaying=True
         
                 

@@ -10,6 +10,8 @@ import string
 import common
 
 DB_PATH=common.get_env.str('DB_PATH',default='data/waterlevel_history')
+DATE_SEP=common.get_env.str('DATE_SEP',default="/")
+DEBUG=common.get_env.str('DEBUG',default='')
 
 with dbm.open(DB_PATH,'c') as db:
     for line in sys.stdin:
@@ -24,9 +26,11 @@ with dbm.open(DB_PATH,'c') as db:
             height=fields[2]
         else:
             continue # bad number of fields
+        if DEBUG:
+            print(fields[0]+' '+hour_of_day)
         secs=time.mktime(
             time.strptime(
-                fields[0]+' '+hour_of_day,"%Y/%m/%d %I:%M %p"))
+                fields[0]+' '+hour_of_day,"%Y{ds}%m{ds}%d %I:%M %p".format(ds=DATE_SEP)))
         value=','.join([fields[0],hour_of_day,height])
         db[str(secs)]=value
 
