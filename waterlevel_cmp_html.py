@@ -6,6 +6,7 @@ import time
 import numpy as np
 import common
 import plotwl
+import os
 
 # default is 60 minutes between observations
 TIME_IVAL=common.get_env.float('TIME_IVAL',default=3600)
@@ -24,6 +25,8 @@ default='St. Lawrence river water level measured at ' + STATION_LABELS)
 # second ID from those of the first ID.
 STATION_DIFFS=common.get_env.str('STATION_DIFFS',
 default='15540,15520;')
+TMIN=os.environ.get('TMIN',None)
+TMAX=os.environ.get('TMAX',None)
 
 station_ids=STATION_IDS.split(',')
 station_labels=STATION_LABELS.split(',')
@@ -34,7 +37,7 @@ data_info=dict()
 for sid,sla in zip(station_ids,station_labels):
     sla=sla.strip()
     db_path=DB_PATH_FMT % (sid,)
-    dt_,l_,t_=plotwl.db_to_fmttime_y(db_path,TIME_IVAL,return_seconds=True)
+    dt_,l_,t_=plotwl.db_to_fmttime_y(db_path,TIME_IVAL,return_seconds=True,t_min=TMIN,t_max=TMAX)
     data.append(go.Line(x=dt_,y=l_,name=sla))
     data_info[sid]=dict(label=sla,
                         fmtt=dt_,
@@ -67,6 +70,6 @@ fig.update_layout(
 )
 
 if RENDER_HTML != 0:
-    fig.write_html(sys.stdout,include_plotlyjs='cdn',post_script='PLOT_DIV="{plot_id}";')
+    fig.write_html(sys.stdout,include_plotlyjs='directory',post_script='PLOT_DIV="{plot_id}";')
 else:
     fig.show()

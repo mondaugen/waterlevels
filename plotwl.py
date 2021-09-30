@@ -9,11 +9,15 @@ def db_to_fmttime_y(
 db_path,
 time_ival,
 time_format='%Y %m %d %H:%M',
-return_seconds=False):
+return_seconds=False,
+t_min=None,
+t_max=None):
     """
     looks up data indexed by time in epoch seconds from a database
     spaces the data equally by interpolating
     formats the x-axis using strftime
+    if t_min or t_max are specified, these are used to limit the bounds on the
+    output times. They are specified in the same format as time_format.
     returns array of formated times and y
     """
 
@@ -34,7 +38,15 @@ return_seconds=False):
     # interpolate the depths looked up at equally spaced times
     t=np.array(times)
     l=np.array(levels)
-    t_=np.arange(t.min(),t.max()+time_ival,time_ival)
+    if t_min is None:
+        t_min = t.min()
+    else:
+        t_min = time.mktime(time.strptime(t_min,time_format))
+    if t_max is None:
+        t_max = t.max()
+    else:
+        t_max = time.mktime(time.strptime(t_max,time_format))
+    t_=np.arange(t_min,t_max+time_ival,time_ival)
     l_=np.interp(t_, t, l)
 
     # now convert the equally spaced times to date formats
